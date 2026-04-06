@@ -1,7 +1,7 @@
 /**
  * Servicio de Auditoría — Reportes y análisis.
  */
-import axios from 'axios'
+import api from './api'
 
 const API = '/api/Auditoria'
 
@@ -129,34 +129,34 @@ function buildParams(fechaDesde: string, fechaHasta: string) {
 
 export const auditoriaService = {
     getResumenGeneral: (fechaDesde: string, fechaHasta: string) =>
-        axios.get<ResumenGeneral>(`${API}/resumen-general`, buildParams(fechaDesde, fechaHasta))
+        api.get<ResumenGeneral>(`${API}/resumen-general`, buildParams(fechaDesde, fechaHasta))
             .then(r => r.data),
 
     getViaticos: (fechaDesde: string, fechaHasta: string) =>
-        axios.get<AuditoriaResponse<ViaticoAuditoria>>(`${API}/viaticos`, buildParams(fechaDesde, fechaHasta))
+        api.get<AuditoriaResponse<ViaticoAuditoria>>(`${API}/viaticos`, buildParams(fechaDesde, fechaHasta))
             .then(r => r.data),
 
     getReparaciones: (fechaDesde: string, fechaHasta: string) =>
-        axios.get<AuditoriaResponse<ReparacionAuditoria>>(`${API}/reparaciones`, buildParams(fechaDesde, fechaHasta))
+        api.get<AuditoriaResponse<ReparacionAuditoria>>(`${API}/reparaciones`, buildParams(fechaDesde, fechaHasta))
             .then(r => r.data),
 
     getEscoltas: (fechaDesde: string, fechaHasta: string) =>
-        axios.get<AuditoriaResponse<EscoltaAuditoria>>(`${API}/escoltas`, buildParams(fechaDesde, fechaHasta))
+        api.get<AuditoriaResponse<EscoltaAuditoria>>(`${API}/escoltas`, buildParams(fechaDesde, fechaHasta))
             .then(r => r.data),
 
     getGastosPorChofer: (fechaDesde: string, fechaHasta: string) =>
-        axios.get<AuditoriaResponse<GastoChofer>>(`${API}/gastos-por-chofer`, buildParams(fechaDesde, fechaHasta))
+        api.get<AuditoriaResponse<GastoChofer>>(`${API}/gastos-por-chofer`, buildParams(fechaDesde, fechaHasta))
             .then(r => r.data),
 
     getGastosPorDestino: (fechaDesde: string, fechaHasta: string) =>
-        axios.get<AuditoriaResponse<GastoDestino>>(`${API}/gastos-por-destino`, buildParams(fechaDesde, fechaHasta))
+        api.get<AuditoriaResponse<GastoDestino>>(`${API}/gastos-por-destino`, buildParams(fechaDesde, fechaHasta))
             .then(r => r.data),
 
     getGastosPorVehiculo: (fechaDesde: string, fechaHasta: string) =>
-        axios.get<AuditoriaResponse<GastoVehiculo>>(`${API}/gastos-por-vehiculo`, buildParams(fechaDesde, fechaHasta))
+        api.get<AuditoriaResponse<GastoVehiculo>>(`${API}/gastos-por-vehiculo`, buildParams(fechaDesde, fechaHasta))
             .then(r => r.data),
 
     getGastosPorSolicitante: (fechaDesde: string, fechaHasta: string) =>
-        axios.get<AuditoriaResponse<GastoSolicitante>>(`${API}/gastos-por-solicitante`, buildParams(fechaDesde, fechaHasta))
+        api.get<AuditoriaResponse<GastoSolicitante>>(`${API}/gastos-por-solicitante`, buildParams(fechaDesde, fechaHasta))
             .then(r => r.data),
 }
