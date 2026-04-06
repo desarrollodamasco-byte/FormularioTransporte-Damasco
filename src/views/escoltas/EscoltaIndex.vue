@@ -7,7 +7,7 @@
           <v-col cols="12" md="6"><v-text-field v-model="nombreSolicitante" label="Nombre del Solicitante" /></v-col>
           <v-col cols="12" md="6"><v-text-field v-model="fechaSolicitud" label="Fecha de Solicitud" type="date" /></v-col>
           <v-col cols="12" md="6">
-            <v-autocomplete v-model="cedulaEscolta" :items="escoltas" item-title="nameChofer" item-value="cedulaChofer" label="Escolta Beneficiario" />
+            <v-autocomplete v-model="cedulaEscolta" :items="escoltas" item-title="nombreEscolta" item-value="cedulaEscolta" label="Escolta Beneficiario" />
           </v-col>
           <v-col cols="12"><v-textarea v-model="observaciones" label="Observaciones" rows="2" /></v-col>
         </v-row>
@@ -37,8 +37,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { consultasService } from '@/services/consultasService'
-import type { Chofer } from '@/interfaces'
-const escoltas = ref<Chofer[]>([])
+import type { Escolta } from '@/interfaces'
+const escoltas = ref<Escolta[]>([])
 const nombreSolicitante = ref(''); const fechaSolicitud = ref(''); const cedulaEscolta = ref(''); const observaciones = ref('')
 const origen = ref(''); const destino = ref(''); const fechaSalida = ref('')
 const nroPlaca = ref(''); const marcaVeh = ref(''); const modeloVeh = ref('')
