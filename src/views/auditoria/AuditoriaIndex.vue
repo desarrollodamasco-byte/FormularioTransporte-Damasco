@@ -188,9 +188,24 @@
                 <span class="font-weight-bold">Bs. {{ formatNum(item.totalGeneralBs) }}</span>
               </template>
               <template #item.viajaEscoltado="{ item }">
-                <v-chip :color="item.viajaEscoltado ? 'success' : 'grey'" variant="flat" size="small">
-                  {{ item.viajaEscoltado ? 'Sí' : 'No' }}
+                <v-chip
+                  v-if="item.viajaEscoltado"
+                  color="primary" variant="flat" size="small"
+                  prepend-icon="mdi-shield-account"
+                >
+                  {{ item.cantEscoltas ?? '—' }}
                 </v-chip>
+                <span v-else class="text-grey text-body-2">No</span>
+              </template>
+              <template #item.cantDiasExtra="{ item }">
+                <v-chip
+                  v-if="item.cantDiasExtra"
+                  color="orange" variant="flat" size="small"
+                  prepend-icon="mdi-calendar-plus"
+                >
+                  {{ item.cantDiasExtra }} ({{ item.tipoDiaExtra ?? '' }})
+                </v-chip>
+                <span v-else class="text-grey text-body-2">—</span>
               </template>
               <template #item.asignacionPeaje="{ item }">
                 <span>Bs. {{ formatNum(item.asignacionPeaje) }}</span>
@@ -582,7 +597,8 @@ const headersViaticos = [
   { title: 'Días', key: 'diasDeViaje', width: '70px' },
   { title: 'Chofer(es)', key: 'choferes' },
   { title: 'Placa(s)', key: 'placas', width: '120px' },
-  { title: 'Escoltado', key: 'viajaEscoltado', width: '100px' },
+  { title: 'Escoltado', key: 'viajaEscoltado', width: '110px' },
+  { title: 'Días Extra', key: 'cantDiasExtra', width: '140px' },
   { title: 'Asig. Peaje', key: 'asignacionPeaje', width: '120px' },
   { title: 'Cant. Peajes', key: 'cantPeajes', width: '110px' },
   { title: 'Total Peajes', key: 'totalPeajesBs', width: '130px' },

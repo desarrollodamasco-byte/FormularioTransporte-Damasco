@@ -150,6 +150,9 @@ export interface CabeceraViaticoInterface {
     fechaRetorno: string
     viajaEscoltado: boolean
     solictudActiva: boolean
+    cantEscoltas: number | null
+    cantDiasExtra: number | null
+    tipoDiaExtra: string | null
 }
 
 // ══════════════════════════════════════════════════════════════

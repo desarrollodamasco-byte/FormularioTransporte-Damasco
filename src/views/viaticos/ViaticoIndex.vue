@@ -19,6 +19,30 @@
         :loading="loading"
         hover
       >
+        <template #item.viajaEscoltado="{ item }">
+          <v-chip
+            v-if="item.viajaEscoltado"
+            color="primary"
+            size="small"
+            prepend-icon="mdi-shield-account"
+          >
+            {{ item.cantEscoltas ?? '—' }}
+          </v-chip>
+          <span v-else class="text-grey text-body-2">No</span>
+        </template>
+
+        <template #item.cantDiasExtra="{ item }">
+          <v-chip
+            v-if="item.cantDiasExtra"
+            color="orange"
+            size="small"
+            prepend-icon="mdi-calendar-plus"
+          >
+            {{ item.cantDiasExtra }} ({{ item.tipoDiaExtra ?? '' }})
+          </v-chip>
+          <span v-else class="text-grey text-body-2">—</span>
+        </template>
+
         <template #item.actions="{ item }">
           <v-btn icon="mdi-file-pdf-box" variant="text" color="error" size="small" @click="descargarPdf(item.nroSolicitud)" />
         </template>
@@ -41,6 +65,8 @@ const headers = [
   { title: 'Salida', key: 'lugarSalida' },
   { title: 'Destino', key: 'lugarDestino' },
   { title: 'Días', key: 'diasDeViaje', width: '80px' },
+  { title: 'Escoltado', key: 'viajaEscoltado', width: '110px' },
+  { title: 'Días Extra', key: 'cantDiasExtra', width: '160px' },
   { title: 'Fecha', key: 'fechaSolicitud' },
   { title: 'Acciones', key: 'actions', sortable: false, width: '100px' },
 ]
