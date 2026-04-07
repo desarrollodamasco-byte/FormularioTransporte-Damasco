@@ -38,6 +38,9 @@ export interface ViaticoAuditoria {
     asignacionPeaje: number
     cantPeajes: number
     totalPeajesBs: number
+    cantEscoltas: number | null
+    cantDiasExtra: number | null
+    tipoDiaExtra: string | null
 }
 
 export interface ReparacionAuditoria {
