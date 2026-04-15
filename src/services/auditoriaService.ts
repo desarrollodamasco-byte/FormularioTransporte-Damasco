@@ -68,6 +68,7 @@ export interface EscoltaAuditoria {
     nombreSolicitante: string
     nombreEscolta: string
     cedulaEscolta: string
+    destino: string
     observaciones: string
     viaticoDiarioUsd: number
     cantidadDias: number

@@ -671,6 +671,7 @@ const headersEscoltas = [
   { title: 'Solicitante', key: 'nombreSolicitante' },
   { title: 'Nombre Escolta', key: 'nombreEscolta' },
   { title: 'Cédula Escolta', key: 'cedulaEscolta', width: '130px' },
+  { title: 'Destino', key: 'destino' },
   { title: 'Días', key: 'cantidadDias', width: '70px' },
   { title: 'USD/Día', key: 'viaticoDiarioUsd', width: '100px' },
   { title: 'Total USD', key: 'totalUsd', width: '110px' },
