@@ -8,11 +8,12 @@ const API = '/api/Auditoria'
 export interface ResumenGeneral {
     fechaDesde: string
     fechaHasta: string
-    viaticos: { cantidad: number; totalBs: number }
-    reparaciones: { cantidad: number; totalBs: number }
+    viaticos: { cantidad: number; totalBs: number; totalUsd: number }
+    reparaciones: { cantidad: number; totalBs: number; totalUsd: number }
     escoltas: { cantidad: number; totalBs: number; totalUsd: number }
     fletes: { cantidad: number; totalBs: number }
     totalGeneralBs: number
+    totalGeneralUsd: number
     tendenciaMensual: { mes: string; totalBs: number; cantidad: number }[]
 }
 
@@ -34,6 +35,8 @@ export interface ViaticoAuditoria {
     totalExtraBs: number
     totalGeneralBs: number
     viaticoUsd: number
+    extraUsd: number
+    totalGeneralUsd: number
     tipoCambio: number
     asignacionPeaje: number
     cantPeajes: number
@@ -51,6 +54,7 @@ export interface ReparacionAuditoria {
     nombreProveedor: string
     rif: string
     totalReparacion: number
+    totalRepuestosUsd: number
     cantRepuestos: number
     descripcion: string
     nombreBeneficiario: string
@@ -79,6 +83,7 @@ export interface GastoChofer {
     vehiculosUsados: number
     placas: string
     totalBs: number
+    totalUsd: number
 }
 
 export interface GastoDestino {
@@ -87,7 +92,9 @@ export interface GastoDestino {
     totalDiasViaje: number
     promedioDias: number
     totalBs: number
+    totalUsd: number
     promedioBs: number
+    promedioUsd: number
 }
 
 export interface GastoVehiculo {
@@ -98,8 +105,11 @@ export interface GastoVehiculo {
     viajesCount: number
     reparacionesCount: number
     totalViaticoBs: number
+    totalViaticoUsd: number
     totalReparacionBs: number
+    totalReparacionUsd: number
     costoTotalBs: number
+    costoTotalUsd: number
 }
 
 export interface GastoSolicitante {
@@ -109,9 +119,13 @@ export interface GastoSolicitante {
     escoltasCount: number
     totalSolicitudes: number
     viaticoBs: number
+    viaticoUsd: number
     reparacionBs: number
+    reparacionUsd: number
     escoltaBs: number
+    escoltaUsd: number
     totalBs: number
+    totalUsd: number
 }
 
 export interface AuditoriaResponse<T> {
@@ -123,6 +137,7 @@ export interface AuditoriaResponse<T> {
     totalVehiculos?: number
     totalSolicitantes?: number
     totalGeneralBs?: number
+    totalGeneralUsd?: number
     registros: T[]
 }
 
