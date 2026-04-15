@@ -69,6 +69,7 @@
               <p class="text-white text-caption mb-0">Viáticos</p>
               <p class="text-white text-h5 font-weight-bold mb-0">{{ resumen.viaticos.cantidad }}</p>
               <p class="text-white text-caption mb-0 font-weight-medium">Bs. {{ formatNum(resumen.viaticos.totalBs) }}</p>
+              <p class="text-white text-caption mb-0" style="opacity:0.85">$ {{ formatNum(resumen.viaticos.totalUsd || 0) }}</p>
             </div>
           </div>
         </v-card>
@@ -83,6 +84,7 @@
               <p class="text-white text-caption mb-0">Reparaciones</p>
               <p class="text-white text-h5 font-weight-bold mb-0">{{ resumen.reparaciones.cantidad }}</p>
               <p class="text-white text-caption mb-0 font-weight-medium">Bs. {{ formatNum(resumen.reparaciones.totalBs) }}</p>
+              <p class="text-white text-caption mb-0" style="opacity:0.85">$ {{ formatNum(resumen.reparaciones.totalUsd || 0) }}</p>
             </div>
           </div>
         </v-card>
@@ -97,6 +99,7 @@
               <p class="text-white text-caption mb-0">Escoltas</p>
               <p class="text-white text-h5 font-weight-bold mb-0">{{ resumen.escoltas.cantidad }}</p>
               <p class="text-white text-caption mb-0 font-weight-medium">Bs. {{ formatNum(resumen.escoltas.totalBs) }}</p>
+              <p class="text-white text-caption mb-0" style="opacity:0.85">$ {{ formatNum(resumen.escoltas.totalUsd || 0) }}</p>
             </div>
           </div>
         </v-card>
@@ -124,7 +127,10 @@
           <p class="text-body-2 mb-0">Total General del Período</p>
           <p class="text-caption text-grey">{{ resumen.fechaDesde }} → {{ resumen.fechaHasta }}</p>
         </div>
-        <p class="text-h4 font-weight-bold text-primary">Bs. {{ formatNum(resumen.totalGeneralBs) }}</p>
+        <div class="text-right">
+          <p class="text-h4 font-weight-bold text-primary mb-0">Bs. {{ formatNum(resumen.totalGeneralBs) }}</p>
+          <p class="text-h6 font-weight-medium text-success mb-0">$ {{ formatNum(resumen.totalGeneralUsd || 0) }}</p>
+        </div>
       </div>
     </v-card>
 
@@ -156,6 +162,10 @@
                 <v-icon start>mdi-cash</v-icon>
                 Bs. {{ formatNum(datosViaticos.totales?.totalGeneralBs || 0) }}
               </v-chip>
+              <v-chip color="teal" variant="tonal" size="large">
+                <v-icon start>mdi-currency-usd</v-icon>
+                $ {{ formatNum(datosViaticos.totales?.totalGeneralUsd || 0) }}
+              </v-chip>
               <v-chip color="info" variant="tonal" size="large">
                 <v-icon start>mdi-road-variant</v-icon>
                 Peajes: Bs. {{ formatNum(datosViaticos.totales?.totalPeajesBs || 0) }}
@@ -186,6 +196,9 @@
             >
               <template #item.totalGeneralBs="{ item }">
                 <span class="font-weight-bold">Bs. {{ formatNum(item.totalGeneralBs) }}</span>
+              </template>
+              <template #item.totalGeneralUsd="{ item }">
+                <span class="font-weight-bold text-success">$ {{ formatNum(item.totalGeneralUsd || 0) }}</span>
               </template>
               <template #item.viajaEscoltado="{ item }">
                 <v-chip
@@ -229,6 +242,10 @@
                 <v-icon start>mdi-cash</v-icon>
                 Bs. {{ formatNum(datosReparaciones.totales?.totalBs || 0) }}
               </v-chip>
+              <v-chip color="teal" variant="tonal" size="large">
+                <v-icon start>mdi-currency-usd</v-icon>
+                $ {{ formatNum(datosReparaciones.totales?.totalUsd || 0) }}
+              </v-chip>
               <v-chip color="info" variant="tonal" size="large">
                 <v-icon start>mdi-cog</v-icon>
                 {{ datosReparaciones.totales?.totalRepuestos || 0 }} repuestos
@@ -257,6 +274,9 @@
             >
               <template #item.totalReparacion="{ item }">
                 <span class="font-weight-bold text-error">Bs. {{ formatNum(item.totalReparacion) }}</span>
+              </template>
+              <template #item.totalRepuestosUsd="{ item }">
+                <span class="font-weight-bold text-success">$ {{ formatNum(item.totalRepuestosUsd || 0) }}</span>
               </template>
             </v-data-table>
           </div>
@@ -319,6 +339,10 @@
                 <v-icon start>mdi-cash</v-icon>
                 Bs. {{ formatNum(datosChoferes.totalGeneralBs || 0) }}
               </v-chip>
+              <v-chip color="teal" variant="tonal" size="large">
+                <v-icon start>mdi-currency-usd</v-icon>
+                $ {{ formatNum(datosChoferes.totalGeneralUsd || 0) }}
+              </v-chip>
             </div>
             <div class="d-flex ga-2 mb-3 align-center">
               <v-text-field
@@ -344,6 +368,9 @@
               <template #item.totalBs="{ item }">
                 <span class="font-weight-bold text-primary">Bs. {{ formatNum(item.totalBs) }}</span>
               </template>
+              <template #item.totalUsd="{ item }">
+                <span class="font-weight-bold text-success">$ {{ formatNum(item.totalUsd || 0) }}</span>
+              </template>
             </v-data-table>
           </div>
         </v-tabs-window-item>
@@ -359,6 +386,10 @@
               <v-chip color="success" variant="tonal" size="large">
                 <v-icon start>mdi-cash</v-icon>
                 Bs. {{ formatNum(datosDestinos.totalGeneralBs || 0) }}
+              </v-chip>
+              <v-chip color="teal" variant="tonal" size="large">
+                <v-icon start>mdi-currency-usd</v-icon>
+                $ {{ formatNum(datosDestinos.totalGeneralUsd || 0) }}
               </v-chip>
             </div>
             <div class="d-flex ga-2 mb-3 align-center">
@@ -385,6 +416,9 @@
               <template #item.totalBs="{ item }">
                 <span class="font-weight-bold text-primary">Bs. {{ formatNum(item.totalBs) }}</span>
               </template>
+              <template #item.totalUsd="{ item }">
+                <span class="font-weight-bold text-success">$ {{ formatNum(item.totalUsd || 0) }}</span>
+              </template>
               <template #item.promedioBs="{ item }">
                 <span class="text-grey-darken-1">Bs. {{ formatNum(item.promedioBs) }}</span>
               </template>
@@ -403,6 +437,10 @@
               <v-chip color="success" variant="tonal" size="large">
                 <v-icon start>mdi-cash</v-icon>
                 Bs. {{ formatNum(datosVehiculos.totalGeneralBs || 0) }}
+              </v-chip>
+              <v-chip color="teal" variant="tonal" size="large">
+                <v-icon start>mdi-currency-usd</v-icon>
+                $ {{ formatNum(datosVehiculos.totalGeneralUsd || 0) }}
               </v-chip>
             </div>
             <div class="d-flex ga-2 mb-3 align-center">
@@ -429,6 +467,9 @@
               <template #item.costoTotalBs="{ item }">
                 <span class="font-weight-bold text-primary">Bs. {{ formatNum(item.costoTotalBs) }}</span>
               </template>
+              <template #item.costoTotalUsd="{ item }">
+                <span class="font-weight-bold text-success">$ {{ formatNum(item.costoTotalUsd || 0) }}</span>
+              </template>
               <template #item.totalViaticoBs="{ item }">
                 <span>Bs. {{ formatNum(item.totalViaticoBs) }}</span>
               </template>
@@ -450,6 +491,10 @@
               <v-chip color="success" variant="tonal" size="large">
                 <v-icon start>mdi-cash</v-icon>
                 Bs. {{ formatNum(datosSolicitantes.totalGeneralBs || 0) }}
+              </v-chip>
+              <v-chip color="teal" variant="tonal" size="large">
+                <v-icon start>mdi-currency-usd</v-icon>
+                $ {{ formatNum(datosSolicitantes.totalGeneralUsd || 0) }}
               </v-chip>
             </div>
             <div class="d-flex ga-2 mb-3 align-center">
@@ -475,6 +520,9 @@
             >
               <template #item.totalBs="{ item }">
                 <span class="font-weight-bold text-primary">Bs. {{ formatNum(item.totalBs) }}</span>
+              </template>
+              <template #item.totalUsd="{ item }">
+                <span class="font-weight-bold text-success">$ {{ formatNum(item.totalUsd || 0) }}</span>
               </template>
               <template #item.viaticoBs="{ item }">
                 <span>Bs. {{ formatNum(item.viaticoBs) }}</span>
@@ -603,6 +651,7 @@ const headersViaticos = [
   { title: 'Cant. Peajes', key: 'cantPeajes', width: '110px' },
   { title: 'Total Peajes', key: 'totalPeajesBs', width: '130px' },
   { title: 'Total Bs.', key: 'totalGeneralBs', width: '130px' },
+  { title: 'Total $', key: 'totalGeneralUsd', width: '120px' },
 ]
 
 const headersReparaciones = [
@@ -613,6 +662,7 @@ const headersReparaciones = [
   { title: 'RIF', key: 'rif', width: '120px' },
   { title: 'Repuestos', key: 'cantRepuestos', width: '100px' },
   { title: 'Total Bs.', key: 'totalReparacion', width: '130px' },
+  { title: 'Total $', key: 'totalRepuestosUsd', width: '120px' },
 ]
 
 const headersEscoltas = [
@@ -634,6 +684,7 @@ const headersChoferes = [
   { title: 'Vehículos', key: 'vehiculosUsados', width: '100px' },
   { title: 'Placas', key: 'placas' },
   { title: 'Total Bs.', key: 'totalBs', width: '140px' },
+  { title: 'Total $', key: 'totalUsd', width: '120px' },
 ]
 
 const headersDestinos = [
@@ -642,6 +693,7 @@ const headersDestinos = [
   { title: 'Días Totales', key: 'totalDiasViaje', width: '110px' },
   { title: 'Prom. Días', key: 'promedioDias', width: '110px' },
   { title: 'Total Bs.', key: 'totalBs', width: '140px' },
+  { title: 'Total $', key: 'totalUsd', width: '120px' },
   { title: 'Prom. Bs.', key: 'promedioBs', width: '130px' },
 ]
 
@@ -654,7 +706,8 @@ const headersVehiculos = [
   { title: 'Reparaciones', key: 'reparacionesCount', width: '110px' },
   { title: 'Viáticos Bs.', key: 'totalViaticoBs', width: '120px' },
   { title: 'Reparac. Bs.', key: 'totalReparacionBs', width: '120px' },
-  { title: 'Costo Total', key: 'costoTotalBs', width: '130px' },
+  { title: 'Costo Total Bs.', key: 'costoTotalBs', width: '140px' },
+  { title: 'Costo Total $', key: 'costoTotalUsd', width: '130px' },
 ]
 
 const headersSolicitantes = [
@@ -667,6 +720,7 @@ const headersSolicitantes = [
   { title: 'Reparac. Bs.', key: 'reparacionBs', width: '120px' },
   { title: 'Escolta Bs.', key: 'escoltaBs', width: '120px' },
   { title: 'Total Bs.', key: 'totalBs', width: '130px' },
+  { title: 'Total $', key: 'totalUsd', width: '120px' },
 ]
 
 // ── Computed ──
