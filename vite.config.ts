@@ -14,5 +14,10 @@ export default defineConfig({
     },
     server: {
         port: 4200,
+        allowedHosts: [
+            '9001.aplicacionesdamasco.com',
+            '9000.aplicacionesdamasco.com',
+            '.aplicacionesdamasco.com',
+        ],
     }
 })

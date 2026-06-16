@@ -1,10 +1,9 @@
 <template>
   <div>
-    <h2 class="text-h5 mb-1 font-weight-bold">
-      <v-icon class="mr-2" color="primary">mdi-chart-box</v-icon>
-      Auditoría de Transporte
+    <h2 style="font-size: 32px; font-weight: 700; color: #000; margin-bottom: 4px;">
+      Control de Transporte
     </h2>
-    <p class="text-body-2 text-grey mb-5">Reportes y análisis de gastos por rango de fechas</p>
+    <p style="font-size: 14px; font-weight: 300; color: #747474; margin-bottom: 20px;">Reportes y análisis de gastos por rango de fechas</p>
 
     <!-- ─── FILTRO DE FECHAS ─── -->
     <v-card class="mb-6 pa-4" color="grey-lighten-5" variant="flat">
@@ -60,7 +59,7 @@
     <!-- ─── TARJETAS RESUMEN ─── -->
     <v-row v-if="resumen" class="mb-4">
       <v-col cols="12" sm="6" md="3">
-        <v-card class="pa-4" :style="cardGradient('#D32F2F', '#EF5350')">
+        <v-card class="pa-4" :style="cardGradient('#e1052d', '#ff4757')">
           <div class="d-flex align-center">
             <v-avatar color="rgba(255,255,255,0.2)" size="48">
               <v-icon color="white" size="28">mdi-card-account-details</v-icon>
@@ -75,7 +74,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="6" md="3">
-        <v-card class="pa-4" :style="cardGradient('#1565C0', '#42A5F5')">
+        <v-card class="pa-4" :style="cardGradient('#bc1830', '#e1052d')">
           <div class="d-flex align-center">
             <v-avatar color="rgba(255,255,255,0.2)" size="48">
               <v-icon color="white" size="28">mdi-wrench</v-icon>
@@ -90,7 +89,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="6" md="3">
-        <v-card class="pa-4" :style="cardGradient('#2E7D32', '#66BB6A')">
+        <v-card class="pa-4" :style="cardGradient('#1a1a1a', '#444444')">
           <div class="d-flex align-center">
             <v-avatar color="rgba(255,255,255,0.2)" size="48">
               <v-icon color="white" size="28">mdi-shield-account</v-icon>
@@ -105,7 +104,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="6" md="3">
-        <v-card class="pa-4" :style="cardGradient('#E65100', '#FFA726')">
+        <v-card class="pa-4" :style="cardGradient('#e1052d', '#bc1830')">
           <div class="d-flex align-center">
             <v-avatar color="rgba(255,255,255,0.2)" size="48">
               <v-icon color="white" size="28">mdi-truck</v-icon>
@@ -322,6 +321,15 @@
             >
               <template #item.totalBs="{ item }">
                 <span class="font-weight-bold">Bs. {{ formatNum(item.totalBs) }}</span>
+              </template>
+              <template #item.statusEscolta="{ item }">
+                <v-chip
+                  :color="item.statusEscolta ? 'success' : 'warning'"
+                  variant="flat" size="small"
+                  :prepend-icon="item.statusEscolta ? 'mdi-check-circle' : 'mdi-clock-outline'"
+                >
+                  {{ item.statusEscolta ? 'Aprobado' : 'Pendiente' }}
+                </v-chip>
               </template>
             </v-data-table>
           </div>
@@ -646,7 +654,7 @@ const headersViaticos = [
   { title: 'Chofer(es)', key: 'choferes' },
   { title: 'Placa(s)', key: 'placas', width: '120px' },
   { title: 'Escoltado', key: 'viajaEscoltado', width: '110px' },
-  { title: 'Días Extra', key: 'cantDiasExtra', width: '140px' },
+  { title: 'Extensión', key: 'cantDiasExtra', width: '140px' },
   { title: 'Asig. Peaje', key: 'asignacionPeaje', width: '120px' },
   { title: 'Cant. Peajes', key: 'cantPeajes', width: '110px' },
   { title: 'Total Peajes', key: 'totalPeajesBs', width: '130px' },
@@ -676,6 +684,7 @@ const headersEscoltas = [
   { title: 'USD/Día', key: 'viaticoDiarioUsd', width: '100px' },
   { title: 'Total USD', key: 'totalUsd', width: '110px' },
   { title: 'Total Bs.', key: 'totalBs', width: '130px' },
+  { title: 'Estatus', key: 'statusEscolta', width: '120px' },
 ]
 
 const headersChoferes = [
@@ -772,7 +781,9 @@ function formatMes(mes: string): string {
 function cardGradient(from: string, to: string) {
   return {
     background: `linear-gradient(135deg, ${from} 0%, ${to} 100%)`,
-    borderRadius: '12px',
+    borderRadius: '16px',
+    border: 'none',
+    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
   }
 }
 

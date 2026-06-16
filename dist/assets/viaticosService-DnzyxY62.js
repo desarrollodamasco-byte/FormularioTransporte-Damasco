@@ -1,0 +1,1 @@
+import{a as e,F as s}from"./FileSaver.min-B7E5738s.js";const i="/api/Viaticos",c={addViatico:a=>e.post(`${i}/AgregarViatico`,a).then(t=>t.data),getViaticos:()=>e.get(`${i}/getviaticos`).then(a=>a.data),getPdf:async a=>{const t=await e.get(`${i}/getpdf/${a}`,{responseType:"blob"});s.saveAs(t.data,`viatico_${a}.pdf`)}};export{c as v};

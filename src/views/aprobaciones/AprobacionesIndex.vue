@@ -15,8 +15,25 @@
       <v-tabs-window-item value="viaticos">
         <v-card>
           <v-data-table :headers="headersViaticos" :items="viaticos" :loading="loadingViaticos" hover>
+            <template #item.ruta="{ item }">
+              <div class="d-flex align-center ga-2 flex-wrap">
+                <span>{{ rutaCompleta(item) }}</span>
+                <v-chip
+                  v-if="(item.tramos?.length ?? 0) > 1"
+                  size="x-small"
+                  color="primary"
+                  variant="tonal"
+                  prepend-icon="mdi-map-marker-path"
+                >
+                  {{ item.tramos!.length }} tramos
+                </v-chip>
+              </div>
+            </template>
             <template #item.actions="{ item }">
-              <v-btn icon="mdi-file-pdf-box" variant="text" color="error" size="small" @click="descargarPdfViatico(item.nroSolicitud)" />
+              <div class="d-flex ga-1">
+                <v-btn v-if="item.editable" icon="mdi-pencil" variant="text" color="warning" size="small" title="Editar (24h)" @click="editarViatico(item.nroSolicitud)" />
+                <v-btn icon="mdi-file-pdf-box" variant="text" color="error" size="small" @click="descargarPdfViatico(item.nroSolicitud)" />
+              </div>
             </template>
           </v-data-table>
         </v-card>
@@ -37,6 +54,20 @@
       <v-tabs-window-item value="escoltas">
         <v-card>
           <v-data-table :headers="headersEscoltas" :items="escoltas" :loading="loadingEscoltas" hover>
+            <template #item.ruta="{ item }">
+              <div class="d-flex align-center ga-2 flex-wrap">
+                <span>{{ rutaCompletaEscolta(item) }}</span>
+                <v-chip
+                  v-if="(item.tramos?.length ?? 0) > 1"
+                  size="x-small"
+                  color="primary"
+                  variant="tonal"
+                  prepend-icon="mdi-map-marker-path"
+                >
+                  {{ item.tramos!.length }} tramos
+                </v-chip>
+              </div>
+            </template>
             <template #item.actions="{ item }">
               <v-btn icon="mdi-file-pdf-box" variant="text" color="error" size="small" @click="descargarPdfEscolta(item.nroSolicitud)" />
             </template>
@@ -50,10 +81,15 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { viaticosService } from '@/services/viaticosService'
 import { reparacionesService } from '@/services/reparacionesService'
 import { escoltasService } from '@/services/escoltasService'
+import { useViaticoStore } from '@/stores/viaticoStore'
 import type { CabeceraViaticoInterface, CarRepairsHeader, EscoltaHeader } from '@/interfaces'
+
+const router = useRouter()
+const viaticoStore = useViaticoStore()
 
 const tab = ref('viaticos')
 const viaticos = ref<CabeceraViaticoInterface[]>([])
@@ -66,10 +102,10 @@ const loadingEscoltas = ref(false)
 const headersViaticos = [
   { title: '#', key: 'nroSolicitud', width: '80px' },
   { title: 'Solicitante', key: 'nombreSolicitante' },
-  { title: 'Destino', key: 'lugarDestino' },
+  { title: 'Ruta', key: 'ruta', sortable: false, minWidth: '240px' },
   { title: 'Días', key: 'diasDeViaje', width: '80px' },
   { title: 'Fecha', key: 'fechaSolicitud' },
-  { title: '', key: 'actions', sortable: false, width: '80px' },
+  { title: '', key: 'actions', sortable: false, width: '120px' },
 ]
 
 const headersReparaciones = [
@@ -83,9 +119,40 @@ const headersReparaciones = [
 const headersEscoltas = [
   { title: '#', key: 'nroSolicitud', width: '80px' },
   { title: 'Solicitante', key: 'nombreSolicitante' },
+  { title: 'Cédula Escolta', key: 'cedulaEscolta' },
+  { title: 'Ruta', key: 'ruta', sortable: false, minWidth: '220px' },
   { title: 'Fecha', key: 'fechaSolicitud' },
   { title: '', key: 'actions', sortable: false, width: '80px' },
 ]
+
+/** Arma la ruta completa encadenando tramos. Fallback: lugarSalida → lugarDestino. */
+function rutaCompleta(v: CabeceraViaticoInterface): string {
+  const tramos = v.tramos ?? []
+  if (tramos.length > 0) {
+    const sorted = [...tramos].sort((a, b) => a.orden - b.orden)
+    const puntos = [sorted[0].origen]
+    for (const t of sorted) {
+      if (t.destino && t.destino !== puntos[puntos.length - 1]) puntos.push(t.destino)
+    }
+    return puntos.filter(Boolean).join(' → ')
+  }
+  const s = v.lugarSalida || ''
+  const d = v.lugarDestino || ''
+  return s && d ? `${s} → ${d}` : (s || d || '—')
+}
+
+function rutaCompletaEscolta(item: any): string {
+  const tramos = item.tramos ?? []
+  if (tramos.length > 0) {
+    const sorted = [...tramos].sort((a: any, b: any) => a.orden - b.orden)
+    const puntos = [sorted[0].origen]
+    for (const t of sorted) {
+      if (t.destino && t.destino !== puntos[puntos.length - 1]) puntos.push(t.destino)
+    }
+    return puntos.filter(Boolean).join(' → ')
+  }
+  return '—'
+}
 
 onMounted(async () => {
   loadingViaticos.value = true
@@ -106,6 +173,12 @@ onMounted(async () => {
     loadingEscoltas.value = false
   }
 })
+
+const editarViatico = async (id: number) => {
+  viaticoStore.reset()
+  await viaticoStore.loadForEdit(id)
+  router.push('/formulario-viatico/inicio-viatico')
+}
 
 const descargarPdfViatico = (id: number) => viaticosService.getPdf(id)
 const descargarPdfRep = (id: number) => reparacionesService.getPdf(id)

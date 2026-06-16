@@ -24,6 +24,14 @@ export interface Vehiculo {
     typeCar: string
 }
 
+export interface Remolque {
+    plateNumber: string
+    carBrand: string
+    carModel: string
+    carSerial: string
+    typeCar: string
+}
+
 export interface Escolta {
     nombreEscolta: string
     cedulaEscolta: string
@@ -36,6 +44,8 @@ export interface Destino {
     idDestination: string
     nameDestination: string
     dayDestination: string
+    cantPeajes?: number
+    viaticoDiario?: number
 }
 
 export interface Peajes {
@@ -69,6 +79,17 @@ export interface DiaExtra {
     viaticoMonto: number
 }
 
+export interface ProveedorTaller {
+    id: number
+    cedulaRif: string
+    razonSocial: string
+    cedulaRifBeneficiario: string
+    nombreBeneficiario: string
+    nroCuenta: string
+    banco: string
+    tipo: 'repuesto' | 'viatico'
+}
+
 // ══════════════════════════════════════════════════════════════
 // Viáticos
 // ══════════════════════════════════════════════════════════════
@@ -84,6 +105,28 @@ export interface PeajeHeaderRequest {
     fechaRetorno: string
     observaciones?: string
     viajaEscoltado: boolean
+    cedulasEscoltas?: string[]
+    tramos?: ViaticoTramo[]
+}
+
+export interface ViaticoTramo {
+    orden: number
+    origen: string
+    destino: string
+    pernocta: boolean
+    diasViajeTramo: number
+    viaticoDiarioTramo: number
+    totalViaticoTramo: number
+    cantPeajes: number
+    montoPeaje: number
+    totalPeajes: number
+}
+
+/** Precinto que carga una gandola en un tramo específico del viático. */
+export interface PrecintoVehiculoTramo {
+    ordenTramo: number
+    idPrecinto: string
+    facturaNumero?: string
 }
 
 export interface VehiculoViatico {
@@ -95,6 +138,11 @@ export interface VehiculoViatico {
     carModel: string
     carSerial: string
     typeCar: string
+    plateNumberRemolque?: string
+    tieneSegundaPuerta?: boolean
+    idPrecintoSegundaPuerta?: string
+    /** Precintos que esta gandola lleva en cada tramo del viático. */
+    precintosTramos?: PrecintoVehiculoTramo[]
     nroSolicitud?: number
 }
 
@@ -135,6 +183,7 @@ export interface ViaticoRequest {
     vehiculoViaticos: VehiculoViatico[]
     pagoViaticoGeneral: PagoViaticoGeneral
     pagoViaticoDiaExtra?: PagoViaticoDiaExtra | null
+    monedaCompraExterna?: MonedaCompra
 }
 
 export interface CabeceraViaticoInterface {
@@ -153,6 +202,9 @@ export interface CabeceraViaticoInterface {
     cantEscoltas: number | null
     cantDiasExtra: number | null
     tipoDiaExtra: string | null
+    editable: boolean
+    puedeAgregarDiaExtra: boolean
+    tramos?: ViaticoTramo[]
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -166,6 +218,7 @@ export interface HeaderReparation {
     tipoDocumento?: string
     numeroDocumento: string
     description?: string
+    tipoSolicitud?: string
 }
 
 export interface PartsRequest {
@@ -197,6 +250,7 @@ export interface ReparationInfo {
     vehiculos: Vehiculo[]
     partsRequests: PartsRequest[]
     infoPayment: PaymentInfo
+    monedaCompraExterna?: MonedaCompra
 }
 
 export interface CarRepairsHeader {
@@ -207,6 +261,7 @@ export interface CarRepairsHeader {
     tipoDocumento: string
     numeroDocumento: string
     description: string
+    tipoSolicitud: string
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -220,6 +275,8 @@ export interface EscoltaHeader {
     fechaSolicitud: string
     cedulaEscolta: string
     observaciones: string
+    statusEscolta?: boolean | null
+    tramos?: ViaticoEscoltaTramo[]
 }
 
 export interface VehiculoEscoltaInfo {
@@ -231,7 +288,19 @@ export interface VehiculoEscoltaInfo {
     nroPlaca: string
     marca: string
     modelo: string
+    proveedorId?: number | null
+    proveedorRazonSocial?: string
+    tieneSegundaPuerta?: boolean
+    idPrecintoSegundaPuerta?: string
+    precintosTramos?: PrecintoVehiculoTramo[]
     nroSolicitud?: number
+}
+
+export interface VehiculoProveedor {
+    id?: number
+    placa: string
+    proveedorId: number
+    proveedorRazonSocial?: string
 }
 
 export interface ViaticoEscoltaPago {
@@ -243,6 +312,19 @@ export interface ViaticoEscoltaPago {
     nroSolicitud?: number
 }
 
+export interface ViaticoEscoltaTramo {
+    orden: number
+    origen: string
+    destino: string
+    pernocta: boolean
+    diasViajeTramo: number
+    viaticoDiarioTramo: number
+    totalViaticoTramo: number
+    cantPeajes: number
+    montoPeaje: number
+    totalPeajes: number
+}
+
 export interface ViaticoEscoltaRequest {
     nombreSolicitante: string
     fechaSolicitud: string
@@ -251,6 +333,8 @@ export interface ViaticoEscoltaRequest {
     escoltaInfo: { cedulaChofer: string }[]
     vehiculoEscoltaInfo: VehiculoEscoltaInfo[]
     viaticoEscoltaPago: ViaticoEscoltaPago
+    tramos?: ViaticoEscoltaTramo[]
+    monedaCompraExterna?: MonedaCompra
 }
 
 export interface EscoltaResponse {
@@ -258,4 +342,127 @@ export interface EscoltaResponse {
     vehiculoEscoltaInfos: VehiculoEscoltaInfo[]
     personalEscolta: Chofer
     viaticoEscoltaPago: ViaticoEscoltaPago
+}
+
+// ══════════════════════════════════════════════════════════════
+// Órdenes a Proveedores
+// ══════════════════════════════════════════════════════════════
+
+export type OrdenEstatus = 'pendiente' | 'en_progreso' | 'culminada' | 'cancelada'
+
+export interface OrdenGandola {
+    id?: number
+    placaVehiculo: string
+    marca?: string
+    modelo?: string
+    tipoVehiculo?: string
+    placaRemolque?: string
+    nombreChofer: string
+    cedulaChofer: string
+    telefonoChofer?: string
+    observaciones?: string
+}
+
+export interface OrdenProveedor {
+    id: number
+    referencia: string
+    token: string
+    fechaSolicitud: string
+    nombreSolicitante: string
+    proveedorId: number
+    proveedorRazonSocial?: string
+    proveedorCedulaRif?: string
+    fechaViaje: string
+    lugarSalida: string
+    lugarDestino: string
+    cantidadGandolas: number
+    observaciones?: string
+    estatus: OrdenEstatus
+    notasProveedor?: string
+    fechaCulminacion?: string | null
+    gandolas: OrdenGandola[]
+    gandolasRegistradas?: number
+}
+
+export interface OrdenProveedorRequest {
+    nombreSolicitante: string
+    proveedorId: number
+    fechaViaje: string
+    lugarSalida: string
+    lugarDestino: string
+    cantidadGandolas: number
+    observaciones?: string
+}
+
+// ══════════════════════════════════════════════════════════════
+// Auth (Login centralizado Damasco)
+// ══════════════════════════════════════════════════════════════
+
+export type UsuarioRol =
+    | 'solicitante' | 'gerente_area' | 'coordinador_admin'
+    | 'aprobador' | 'cotización' | 'director' | 'admin'
+
+export interface UsuarioAuth {
+    id_usuario: number
+    usuario: string
+    nombre: string
+    roll: UsuarioRol | string
+    email: string
+    departamento: number | null
+    activo: boolean
+}
+
+export interface LoginRequest {
+    usuario: string
+    contrasena: string
+}
+
+export interface LoginResponse {
+    token: string
+    token_type: string
+    usuario: UsuarioAuth
+}
+
+export interface OrdenProveedorPublic {
+    referencia: string
+    fechaSolicitud: string
+    nombreSolicitante: string
+    proveedorRazonSocial: string
+    fechaViaje: string
+    lugarSalida: string
+    lugarDestino: string
+    cantidadGandolas: number
+    observaciones: string
+    estatus: OrdenEstatus
+    notasProveedor: string
+    fechaCulminacion: string | null
+    gandolas: OrdenGandola[]
+}
+
+// ══════════════════════════════════════════════════════════════
+// Solicitudes de Compra (sistema central)
+// ══════════════════════════════════════════════════════════════
+
+export type MonedaCompra = 'USD' | 'EUR' | 'VES'
+export type TipoSolicitudCompra = 'viatico' | 'dia_extra' | 'escolta' | 'reparacion'
+export type EstadoCompraEnviada = 'enviado' | 'error'
+
+export interface SolicitudCompraEnviada {
+    id: number
+    tipo: TipoSolicitudCompra
+    origenId: number
+    origenRef: string
+    descripcion: string
+    moneda: MonedaCompra | string
+    montoTotal: number | string
+    nroSolicitudCompra: number | null
+    loteOrigen: string
+    countSolicitudes: number
+    estado: EstadoCompraEnviada
+    error: string
+    usuarioNombre: string
+    fechaEnvio: string
+    fechaActualizacion: string
+    payloadEnviado?: string
+    respuestaRaw?: string
 }

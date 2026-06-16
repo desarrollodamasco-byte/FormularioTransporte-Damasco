@@ -1,0 +1,1 @@
+import{a as r,F as o}from"./FileSaver.min-B7E5738s.js";const s="/api/Reparaciones",p={addReparacion:a=>r.post(`${s}/AgregarReparacion`,a).then(e=>e.data),getReparaciones:()=>r.get(`${s}/consulta-reparaciones`).then(a=>a.data),getPdf:async a=>{const e=await r.get(`${s}/getpdf/${a}`,{responseType:"blob"});o.saveAs(e.data,`reparacion_${a}.pdf`)}};export{p as r};

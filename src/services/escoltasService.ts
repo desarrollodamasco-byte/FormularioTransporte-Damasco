@@ -18,6 +18,9 @@ export const escoltasService = {
     getViaticoEscolta: (id: number) =>
         api.get<EscoltaResponse>(`${API}/viatico-escolta/${id}`).then(r => r.data),
 
+    editEscolta: (id: number, data: any) =>
+        api.put(`${API}/EditarEscolta/${id}`, data).then(r => r.data),
+
     getPdf: async (id: number) => {
         const response = await api.get(`${API}/getpdf/${id}`, { responseType: 'blob' })
         saveAs(response.data, `escolta_${id}.pdf`)
