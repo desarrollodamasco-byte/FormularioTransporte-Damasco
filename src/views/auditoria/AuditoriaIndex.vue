@@ -324,11 +324,11 @@
               </template>
               <template #item.statusEscolta="{ item }">
                 <v-chip
-                  :color="item.statusEscolta ? 'success' : 'warning'"
+                  :color="(item as any).statusEscolta ? 'success' : 'warning'"
                   variant="flat" size="small"
-                  :prepend-icon="item.statusEscolta ? 'mdi-check-circle' : 'mdi-clock-outline'"
+                  :prepend-icon="(item as any).statusEscolta ? 'mdi-check-circle' : 'mdi-clock-outline'"
                 >
-                  {{ item.statusEscolta ? 'Aprobado' : 'Pendiente' }}
+                  {{ (item as any).statusEscolta ? 'Aprobado' : 'Pendiente' }}
                 </v-chip>
               </template>
             </v-data-table>
