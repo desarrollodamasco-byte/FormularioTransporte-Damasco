@@ -75,6 +75,7 @@ export interface EscoltaAuditoria {
     totalUsd: number
     tasaDolar: number
     totalBs: number
+    statusEscolta?: boolean | null
 }
 
 export interface GastoChofer {
